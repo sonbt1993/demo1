@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" th:href="@{/css/css.css}">
+</head>
+<body>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+
+        <h2 class="inactive underlineHover"><a href="/">HOME</a></h2>
+        <h2 class="active"> Sign In </h2>
+        <h2 class="inactive underlineHover"><a href="/signup">SIGN UP</a></h2>
+
+        <!-- /login?error=true -->
+        <div th:if="${#request.getParameter('error') == 'true'}"
+             style="color:red;margin:10px 0px;">
+            Login Failed!!!
+
+        </div>
+
+        <!-- Login Form -->
+        <form th:action="@{/authentication}" method="post">
+            <input type="text" id="username" name="username" class="fadeIn first" placeholder="Username">
+            <input type="password" id="password" name="password" class="fadeIn second" placeholder="Password">
+            <input type="submit" class="fadeIn third" value="Log In">
+        </form>
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

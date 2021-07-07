@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="content">
+
+  <form th:action="@{/post/add}" th:object="${post}" method="post">
+    <th:block th:each="tag : ${tags}">
+      <input type="checkbox" th:field="*{tags}" th:text="${tag.name}" th:value="${tag.id}">
+    </th:block><br>
+    <input type="hidden" th:field="*{id}"><br>
+    <label>Title</label><br>
+    <input type="text" th:field="*{title}"><br>
+    <label>Content</label><br>
+    <textarea rows="9" cols="60" th:field="*{content}" th:text="*{content}"></textarea><br>
+    <input type="submit" value="Save">
+  </form>
+</div>
+
+</body>
+</html>

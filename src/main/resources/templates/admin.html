@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:title="${#request.userPrincipal.name}">User Info</title>
+    <link rel="stylesheet" th:href="@{/css/css.css}">
+</head>
+<body>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+        <h2 class="inactive underlineHover"><a href="/">HOME</a></h2>
+        <h2 class="inactive underlineHover"><a href="/user">User Info</a></h2>
+        <h2 class="active"> Admin</h2>
+        <h2 class="inactive underlineHover"><a href="/logout">Log Out</a></h2>
+        <h1 style="color: red">Page only for Manager!!</h1>
+
+        <div id="formFooter">
+            Hi, <span th:text="${#request.userPrincipal.getName()}"></span>!
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

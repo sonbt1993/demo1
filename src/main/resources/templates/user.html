@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${personal.getUsername()}">User Info</title>
+  <link rel="stylesheet" th:href="@{/css/css.css}">
+</head>
+<body>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <h2 class="inactive underlineHover"><a href="/">HOME</a></h2>
+    <h2 class="active">User Info</h2>
+    <h2 class="inactive underlineHover"><a href="/admin">Admin</a></h2>
+    <h2 class="inactive underlineHover"><a href="/logout">Log Out</a></h2>
+
+    <th:block th:object="${personal}">
+      <div class="list">
+        <b th:utext="${personal.getUsername()}"></b>
+      </div>
+      <div class="list1">
+        <b>User: </b>
+        <span th:utext="${personal.getUsername()}"></span>
+      </div>
+      <div class="list1">
+        <b>Role: </b>
+        <span th:utext="${personal.getRole().getName()}"></span>
+      </div>
+      <div class="list1">
+        <b>Mail: </b>
+        <span th:utext="${personal.getEmail()}"></span>
+      </div>
+    </th:block>
+
+    <div id="formFooter">
+      Hi, <span th:text="${#request.userPrincipal.getName()}"></span>!
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
