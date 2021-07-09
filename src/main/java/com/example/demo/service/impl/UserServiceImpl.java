@@ -53,5 +53,10 @@ public class UserServiceImpl implements UserService {
         return new PageImpl<>(dtos, pageable, userPage.getTotalElements());
     }
 
+    @Override
+    public void deleteById(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
 
 }

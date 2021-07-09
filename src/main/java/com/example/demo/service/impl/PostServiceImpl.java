@@ -61,17 +61,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public User findUserByPostId(Long postId) {
-        return postRepository.findUserByPostId(postId);
-    }
-
-    @Override
     public Page<Post> listAll(int pageNum, String sortField, String sortDir) {
         Pageable pageable = PageRequest.of(pageNum - 1, 3,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending()
                         : Sort.by(sortField).descending()
         );
         return postRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Post> findAll(Pageable pageable) {
+        return  postRepository.findAll(pageable);
     }
 
 

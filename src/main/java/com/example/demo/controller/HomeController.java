@@ -13,6 +13,7 @@ import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,8 @@ public class HomeController {
         String message = messageSource.getMessage("hello", null, "default message", request.getLocale());
         String message2 = messageSource.getMessage("Welcome", null, "default message", request.getLocale());
         String message3 = messageSource.getMessage("to", null, "default message", request.getLocale());
+        model.addAttribute("message2", message2);
+        model.addAttribute("message3", message3);
         model.addAttribute("message", message);
 
         Page<Post> page = postService.listAll(pageNum, sortField, sortDir);
@@ -61,30 +64,23 @@ public class HomeController {
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
-
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         List<Tag> tags = tagService.getAllTag();
-        List<User> userList = userService.findAll();
-
         model.addAttribute("posts", posts);
         model.addAttribute("tags", tags);
-        model.addAttribute("userList", userList);
-
-
-
         return "index";
     }
 
-    @GetMapping("/allPost")
+    @GetMapping("/postsByTag")
     public String getPostByTag(Model model, @RequestParam("tagId") int tagId) {
         List<Tag> tags = tagService.getAllTag();
         List<Post> posts = postService.findPostByTagId(tagId);
         model.addAttribute("tags", tags);
         model.addAttribute("posts", posts);
-        return "allPostByTag";
+        return "postsByTag";
     }
 
     @GetMapping("/user")

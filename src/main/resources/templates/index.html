@@ -19,12 +19,13 @@
         <header class="py-5 bg-light border-bottom mb-4">
             <div class="container">
                 <div class="text-center my-5">
-                    <a href="?language=en">English</a>|
-                    <a href="?language=vi_VN">Viet Nam</a>|
-                    <a href="?language=ja_JP">Japanese</a>|
-                    <a href="?language=fr_FR">France</a>
-<!--                    <p th:text="${message}">User test</p>-->
-<!--                    <p th:text="#{hello}"></p>-->
+                    <a href="?sortField=lastUpdate&sortDir=desc&language=en">English</a>|
+                    <a href="?sortField=lastUpdate&sortDir=desc&language=vi">Viet Nam</a>|
+                    <a href="?sortField=lastUpdate&sortDir=desc&language=ja">Japanese</a>|
+                    <a href="?sortField=lastUpdate&sortDir=desc&language=fr">France</a>
+                    <p th:text="${message}">User test</p>
+                    <p th:text="${message2}">User test</p>
+                    <p th:text="${message3}">User test</p>
                     <h1 class="fw-bolder" th:text="#{Welcome} +' '+ #{to} +' '+ 'Blog Home!'"></h1>
                 </div>
             </div>
@@ -38,7 +39,7 @@
                         <div th:each="post:${posts}" class="card mb-4">
 <!--                            <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>-->
                             <div class="card-body">
-                                <div class="small text-muted">January 1, 2021</div>
+                                <div class="small text-muted" th:text="${#temporals.format(post.lastUpdate, 'dd/MM/yyy HH:mm')}">January 1, 2021</div>
 
                                 <h2 class="card-title h4" th:text = "${post.title}" ></h2>
                                 <p class="card-text" th:text = "${post.content}"></p>
@@ -51,40 +52,16 @@
                     <nav aria-label="Pagination" th:if="${totalPages > 1}" >
                         <hr class="my-0"/>
                         <ul class="pagination justify-content-center my-4">
-                            <li class="page-item active"><a class="page-link" href="#" tabindex="-1" aria-disabled="true" th:href="@{'/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a></li>
+                            <li class="page-item" ><a class="page-link" tabindex="-1" aria-disabled="true" th:href="@{'/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a></li>
 
                             <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
-                                <li class="page-item active" aria-current="page"  th:if="${currentPage != i}"><a class="page-link" th:href="@{'/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" >[[${i}]]</a></li>
+                                <li class="page-item active" aria-current="page" th:class="${currentPage == i} ? 'page-item active': 'page-item'" ><a class="page-link" th:href="@{'/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" >[[${i}]]</a></li>
                             </th:block>
+
+                            <li class="page-item "><a class="page-link" tabindex="-1" aria-disabled="true" th:href="@{'/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a></li>
 
                         </ul>
                     </nav>
-                    <div class="page-navigator" th:if="${totalPages > 1}">
-                        Total Items: [[${totalItems}]]
-                        &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
-
-                        <a class="nav-item" th:if="${currentPage > 1}" th:href="@{'/productList/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
-                        <span class="nav-item" th:unless="${currentPage > 1}">First</span>
-                        &nbsp;&nbsp;
-
-                        <a class="nav-item" th:if="${currentPage > 1}" th:href="@{'/productList/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
-                        <span class="nav-item" th:unless="${currentPage > 1}">Previous</span>
-
-                        &nbsp;&nbsp;
-
-                        <span class="nav-item" th:each="i: ${#numbers.sequence(1, totalPages)}">
-			<a class="nav-item" th:if="${currentPage != i}" th:href="@{'/productList/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-			<span class="nav-item" th:unless="${currentPage != i}">[[${i}]]</span>
-			&nbsp;
-		</span>
-
-                        <a class="nav-item" th:if="${currentPage < totalPages}" th:href="@{'/productList/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-                        <span class="nav-item" th:unless="${currentPage < totalPages}">Next</span>
-                        &nbsp;&nbsp;
-
-                        <a class="nav-item" th:if="${currentPage < totalPages}" th:href="@{'/productList/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
-                        <span class="nav-item" th:unless="${currentPage < totalPages}">Last</span>
-                    </div>
                 </div>
                 <!-- Side widgets-->
                 <div class="col-lg-4">
@@ -95,7 +72,7 @@
                                 <div class="col-sm-6">
                                     <ul class="list-unstyled mb-0" >
                                         <th:block th:each="tag : ${tags}">
-                                        <li><a th:href="@{/allPost(tagId=${tag.getId()})}" th:utext="${tag.name}"></a></li>
+                                        <li><a th:href="@{/postsByTag(tagId=${tag.getId()})}" th:utext="${tag.name}"></a></li>
                                         </th:block>
                                     </ul>
                                 </div>

@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/user/*" , "/post/add", "/post/edit", "/comment").hasAnyAuthority("Admin", "Member");
 
         //chỉ có quyền Admin, Mod mới được truy cập
-        http.authorizeRequests().antMatchers("/admin/*").hasAnyAuthority("Admin");
+        http.authorizeRequests().antMatchers("/admin/*", "/admin/users/*").hasAnyAuthority("Admin");
 
 //        // Khi không đủ quyền truy cập sẽ bị chuyển hướng
 //        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error");

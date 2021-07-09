@@ -15,17 +15,17 @@
 <!-- Responsive navbar-->
 <th:block th:include="/navbar"></th:block>
 <!-- Page header with logo and tagline-->
-<header class="py-5 bg-light border-bottom mb-4">
-    <div class="container">
-        <div class="text-center my-5">
-            <h1 class="fw-bolder">Welcome to Blog Home!</h1>
-            <p class="lead mb-0" >A Bootstrap 5 starter layout for your next blog homepage</p>
-            <th:block th:each="tag : ${tags}">
-                <li><a th:href="@{/allPost(tagId=${tag.getId()})}" th:utext="${tag.name}"></a></li>
-            </th:block>
-        </div>
-    </div>
-</header>
+<!--<header class="py-5 bg-light border-bottom mb-4">-->
+<!--&lt;!&ndash;    <div class="container">&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="text-center my-5">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;            <h1 class="fw-bolder">Welcome to Blog Home!</h1>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <p class="lead mb-0" >Posts by Tag</p>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th:block th:each="tag : ${tags}">&ndash;&gt;-->
+<!--&lt;!&ndash;                <li><a th:href="@{/allPost(tagId=${tag.getId()})}" th:utext="${tag.name}"></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;            </th:block>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--</header>-->
 <!-- Page content-->
 <div class="container">
     <div class="row">
@@ -77,7 +77,7 @@
                         <div class="col-sm-6">
                             <ul class="list-unstyled mb-0" >
                                 <th:block th:each="tag : ${tags}">
-                                    <li><a th:href="@{/allPost(tagId=${tag.getId()})}" th:utext="${tag.name}"></a></li>
+                                    <li><a th:href="@{/postByTag(tagId=${tag.getId()})}" th:utext="${tag.name}"></a></li>
                                 </th:block>
                             </ul>
                         </div>

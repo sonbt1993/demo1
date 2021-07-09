@@ -30,7 +30,7 @@
                             <div class="text-muted fst-italic mb-2" th:text ="${#temporals.format(post.lastUpdate, 'dd/MM/yyy HH:mm')}" > </div>
                             <div class="text-muted fst-italic mb-2" th:text ="${authorDTO.getUsername()}" > </div>
                             <!-- Post categories-->
-                            <th:block th:each="tag : ${postTags}">
+                            <th:block th:each="tag : ${postTags}" th:if="principal.a">
                             <a class="badge bg-secondary text-decoration-none link-light" href="#!" th:text="${tag.name}"></a>
                             </th:block>
 

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Controller
@@ -21,7 +20,6 @@ public class CommentController {
     @Autowired private PostService postService;
     @Autowired private CommentService commentService;
     @Autowired private UserService userService;
-
 
     @PostMapping("/post/comment/{postId}")
     public String saveComment(@ModelAttribute(name = "comment") Comment comment,

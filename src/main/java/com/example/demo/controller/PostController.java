@@ -41,9 +41,11 @@ public class PostController {
         };
 
         Post post =  postService.getPostById(postId);
+        User author = post.getAuthor();
+
         Long authorId = postService.findUserIdByPostId(postId);
-        User author = userService.findUserById(authorId);
-//        User author = postService.findUserByPostId(postId);
+//        User author = userService.findUserById(authorId);
+
         UserDTO authorDTO = userMapper.userToUserDTO(author);
         if (postId != null){
             model.addAttribute("comment", new Comment());
@@ -75,7 +77,6 @@ public class PostController {
         Post post = postService.getPostById(postId);
         model.addAttribute("tags", tagService.getAllTag());
         model.addAttribute("post", postService.getPostById(postId));
-
         return "editPost";
     }
 

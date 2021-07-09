@@ -22,16 +22,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT author_id FROM post WHERE post.id = :postId" , nativeQuery = true)
     Long findUserIdByPostId( @Param("postId") Long postId );
 
-    @Query(value = "SELECT * FROM user inner join (select post.id as post_id, post.author_id from post) " +
-            "on post.author_id=user.id WHERE post.id = :postId",
-            nativeQuery = true)
-    User findUserByPostId( @Param("postId") Long postId );
-
-        @Query(value = "select * from post inner join post_tag on post_tag.post_id=post.id where tag_id=?1",
+    @Query(value = "select * from post inner join post_tag on post_tag.post_id=post.id where tag_id=?1",
             nativeQuery = true)
     List<Post> findPostByTagId (int tagId);
-
-
-
 
 }
