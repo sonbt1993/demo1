@@ -10,10 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Table(name = "role")
 @Entity
 public class Role {
@@ -24,4 +23,27 @@ public class Role {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")
     private Set<User> userList = new HashSet<>();
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(Set<User> userList) {
+        this.userList = userList;
+    }
 }

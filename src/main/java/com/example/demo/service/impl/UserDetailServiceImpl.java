@@ -1,9 +1,8 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,10 +14,11 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
-    private final UserService userService;
+
+    private final UserServiceImpl userServiceImpl;
     @Override
     public UserDetails loadUserByUsername(String Username) throws UsernameNotFoundException {
-        User user = userService.findUserByUsername(Username);
+        User user = userServiceImpl.findUserByUsername(Username);
         if (user == null) {
             System.out.println("User not found!" + Username);
             throw new UsernameNotFoundException("User " + Username + " was not found in the database");

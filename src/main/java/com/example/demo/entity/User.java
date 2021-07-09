@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "user")
 public class User {
@@ -35,17 +34,6 @@ public class User {
     )
     private List<Post> posts;
 
-    public void addPost(Post post) {
-        posts.add(post);
-        post.setAuthor(this);
-    }
-
-    public void removePost(Post post) {
-        posts.remove(post);
-        post.setAuthor(null);
-    }
-
-
     //Một User viết nhiều Comment
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -55,15 +43,59 @@ public class User {
     @JoinColumn(name = "user_comment_id")
     private List<Comment> comments = new ArrayList<>();
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setCommenter(this);
-    }
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
-        comment.setCommenter(null);
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }

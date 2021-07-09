@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public class Comment {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     private User commenter; //Mỗi comment phải do một commenter viết
 
     public void setCommenter(User user) {

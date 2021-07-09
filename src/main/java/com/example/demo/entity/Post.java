@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "post")
@@ -46,17 +47,8 @@ public class Post {
     @JoinColumn(name = "post_id")
     private List<Comment> comments = new ArrayList<>();
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setPost(this);
-    }
-
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
-        comment.setPost(null);
-    }
-
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     private User author;
 
     @ManyToMany
@@ -64,4 +56,60 @@ public class Post {
             joinColumns = @JoinColumn(name = "postId"),
             inverseJoinColumns = @JoinColumn(name = "tagId"))
     private Set<Tag> tags = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 }
