@@ -18,6 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Post findPostById(Long id);
     List<Post> findByAuthor(User user);
 
+
     // Native SQL
     @Query(value = "SELECT author_id FROM post WHERE post.id = :postId" , nativeQuery = true)
     Long findUserIdByPostId( @Param("postId") Long postId );

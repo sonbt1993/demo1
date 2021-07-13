@@ -25,12 +25,12 @@
                         <!-- Post header-->
                         <header class="mb-4">
                             <!-- Post title-->
-                            <h1 class="fw-bolder mb-1" th:text ="${post.title}"></h1>
+                            <h1 class="fw-bolder mb-1" th:text ="${postDTO.title}"></h1>
                             <!-- Post meta content-->
-                            <div class="text-muted fst-italic mb-2" th:text ="${#temporals.format(post.lastUpdate, 'dd/MM/yyy HH:mm')}" > </div>
+                            <div class="text-muted fst-italic mb-2" th:text ="${#temporals.format(postDTO.lastUpdate, 'dd/MM/yyy HH:mm')}" > </div>
                             <div class="text-muted fst-italic mb-2" th:text ="${authorDTO.getUsername()}" > </div>
                             <!-- Post categories-->
-                            <th:block th:each="tag : ${postTags}" th:if="principal.a">
+                            <th:block th:each="tag : ${postTags}" >
                             <a class="badge bg-secondary text-decoration-none link-light" href="#!" th:text="${tag.name}"></a>
                             </th:block>
 
@@ -39,7 +39,7 @@
 <!--                        <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>-->
                         <!-- Post content-->
                         <section class="mb-5">
-                            <p class="fs-5 mb-4" th:text ="${post.content}" ></p>
+                            <p class="fs-5 mb-4" th:text ="${postDTO.content}" ></p>
 
                         </section>
                     </article>
@@ -48,13 +48,13 @@
                         <div class="card bg-light">
                             <div class="card-body">
                                 <!-- Comment form-->
-                                <form class="mb-4" th:action="@{/post/comment/{postId}(postId=${post.id})}" th:object="${comment}" method="post">
+                                <form class="mb-4" th:action="@{/post/comment/{postId}(postId=${postDTO.id})}" th:object="${comment}" method="post">
                                     <textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!" th:field="*{content}"></textarea>
                                     <input type="submit" value="Save">
                                 </form>
                                 <hr>
                                 <!-- Comment with nested comments-->
-                                <div class="d-flex mb-4" th:each="comment:${post.getComments()}">
+                                <div class="d-flex mb-4" th:each="comment:${comments}">
                                     <!-- Parent comment-->
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
@@ -92,8 +92,8 @@
                     <div class="card mb-4" sec:authorize="isAuthenticated()" th:if="${accessingUserDTO.id} == ${authorDTO.getId()}">
                         <div class="card-header">Side Widget</div>
                         <div class="card-body" >
-                            <a class="btn btn-primary" th:href="@{/post/edit(postId=${post.getId()})}">Edit</a>
-                            <a class="btn btn-primary" th:href="@{'/post/delete/' + ${post.id}}">Delete</a>
+                            <a class="btn btn-primary" th:href="@{/post/edit(postId=${postDTO.getId()})}">Edit</a>
+                            <a class="btn btn-primary" th:href="@{'/post/delete/' + ${postDTO.id}}">Delete</a>
                         </div>
                     </div>
                 </div>

@@ -9,8 +9,11 @@ import java.util.List;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Integer> {
-    @Query("SELECT t FROM tag AS t WHERE t.id >= 1")
+    @Query("SELECT t FROM tag AS t WHERE t.id >= 1 order by t.id ASC")
     List<Tag> getAllTag();
+    Tag save(Tag tag);
+    Tag findById(int Id);
+
 
 //    List<Tag> getAllByPost(Post post);
 }

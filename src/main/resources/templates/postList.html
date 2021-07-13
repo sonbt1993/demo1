@@ -23,16 +23,18 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Author</th>
-                    <th>Title</th>
-                    <th>Last Update</th>
-                    <th>Email</th>
-                    <th>Categories</th>
+                    <th><a th:href="@{'/admin/posts/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">Id</a></th>
+                    <th><a th:href="@{'/admin/posts/' + ${currentPage} + '?sortField=author&sortDir=' + ${reverseSortDir}}">Author</a></th>
+                    <th><a th:href="@{'/admin/posts/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">Title</a></th>
+                    <th><a th:href="@{'/admin/posts/' + ${currentPage} + '?sortField=lastUpdate&sortDir=' + ${reverseSortDir}}">Last Update</a></th>
+                    <th><a th:href="@{'/admin/posts/' + ${currentPage} + '?sortField=author&sortDir=' + ${reverseSortDir}}">Email</a></th>
+                    <th><a>Categories</a></th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody >
-                <tr th:each="post:${posts}">
+                <tr th:each="post:${postPage}">
+                    <td th:text="${post.getId()}"></td>
                     <td th:text="${post.getAuthor().getUsername()}"></td>
                     <td th:text="${post.getTitle()}"></td>
                     <td th:text="${#temporals.format(post.lastUpdate, 'dd/MM/yyy HH:mm')}"></td>
@@ -44,7 +46,6 @@
                             </tr>
                         </table>
                     </td>
-
                     <td>
                         <a class="btn btn-primary" th:href="@{/post/edit(postId=${post.getId()})}">Edit</a>
                         <a class="btn btn-primary" th:href="@{'/post/delete/' + ${post.id}}">Delete</a>
@@ -52,13 +53,25 @@
                 </tr>
                 </tbody>
             </table>
+            Total Items: [[${totalItems}]]
+            <nav aria-label="Pagination" th:if="${totalPages > 1}" >
+                <hr class="my-0"/>
+                <ul class="pagination justify-content-center my-4">
+                    <li class="page-item" ><a class="page-link" tabindex="-1" aria-disabled="true" th:href="@{'/admin/posts/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a></li>
+
+                    <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
+                        <li class="page-item active" aria-current="page" th:class="${currentPage == i} ? 'page-item active': 'page-item'" ><a class="page-link" th:href="@{'/admin/posts/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" >[[${i}]]</a></li>
+                    </th:block>
+
+                    <li class="page-item "><a class="page-link" tabindex="-1" aria-disabled="true" th:href="@{'/admin/posts/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a></li>
+
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
 <!-- Footer-->
-<footer class="py-5 bg-dark">
-    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
-</footer>
+<th:block th:include="/footer"></th:block>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->

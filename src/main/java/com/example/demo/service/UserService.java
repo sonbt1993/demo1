@@ -13,6 +13,7 @@ public interface UserService {
     Page<User> listAll(int pageNum, String sortField, String sortDir);
     Page<UserDTO> getUserDTOs(int pageNum, String sortField, String sortDir);
     void deleteById(Long userId);
+    User save(User user);
 
 
 }

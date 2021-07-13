@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.UserDTO;
-import com.example.demo.DTO.UserMapper;
+import com.example.demo.DTO.*;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Post;
 import com.example.demo.entity.User;
@@ -31,6 +30,12 @@ public class PostController {
     CommentService commentService;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    CommentMapper commentMapper;
+    @Autowired
+    TagMapper tagMapper;
+    @Autowired
+    PostMapper postMapper;
 
     @GetMapping("/post/{postId}")
     public String postDetail(Model model, @PathVariable("postId") Long postId, Principal principal ) {
@@ -41,15 +46,23 @@ public class PostController {
         };
 
         Post post =  postService.getPostById(postId);
+        PostDTO postDTO = postMapper.postToPostDTO(post);
+        List<Comment> comments = post.getComments();
+        List<CommentDTO> commentDTOList = commentMapper.commentsToCommentDTOS(comments);
+
+        if(post==null){
+            return "error";
+        };
         User author = post.getAuthor();
 
-        Long authorId = postService.findUserIdByPostId(postId);
+//        Long authorId = postService.findUserIdByPostId(postId);
 //        User author = userService.findUserById(authorId);
 
         UserDTO authorDTO = userMapper.userToUserDTO(author);
         if (postId != null){
             model.addAttribute("comment", new Comment());
-            model.addAttribute("post", post);
+            model.addAttribute("comments", comments);
+            model.addAttribute("postDTO", post);
             model.addAttribute("tags", tagService.getAllTag());            ;
             model.addAttribute("postTags", post.getTags());
             model.addAttribute("authorDTO", authorDTO);
@@ -58,7 +71,7 @@ public class PostController {
     }
 
     @GetMapping("/post/add")
-    public String addPost( Model model, Principal principal) {
+    public String addPost( Model model) {
         model.addAttribute("tags", tagService.getAllTag());
         model.addAttribute("post", new Post());
         return "addPost";
@@ -75,15 +88,23 @@ public class PostController {
     @GetMapping("/post/edit")
     public String editPost(@RequestParam("postId") Long postId, Model model ) {
         Post post = postService.getPostById(postId);
+        User user = post.getAuthor();
+        UserDTO author = userMapper.userToUserDTO(user);
+        if(post==null){
+            return "error";
+        };
         model.addAttribute("tags", tagService.getAllTag());
-        model.addAttribute("post", postService.getPostById(postId));
-        return "editPost";
+        model.addAttribute("author", author);
+        model.addAttribute("post", post);
+        return "addPost";
     }
 
     @PostMapping("/post/edit")
-    public String saveEditPost(Model model, @ModelAttribute(name = "post") Post post, Principal principal){
-        User personal = userService.findUserByUsername(principal.getName());
-        post.setAuthor(personal);
+    public String saveEditPost(Model model, @ModelAttribute(name = "post") Post post,
+                               @ModelAttribute(name = "author") UserDTO author){
+
+        User user = userService.findUserById(author.getId());
+        post.setAuthor(user);
         postService.addPostIntoUser(post);
         return "redirect:/post/" + post.getId();
     }

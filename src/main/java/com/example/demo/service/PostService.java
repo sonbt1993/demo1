@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.DTO.PostDTO;
 import com.example.demo.entity.Post;
 import com.example.demo.entity.Tag;
 import com.example.demo.entity.User;
@@ -19,6 +20,7 @@ public interface PostService {
     Long findUserIdByPostId(Long postId);
     List<Post> findPostByTagId (int tagId);
     Page<Post> listAll(int pageNum, String sortField, String sortDir);
+    Page<PostDTO> listAllDTO(int pageNum, String sortField, String sortDir);
     Page<Post> findAll(Pageable pageable);
 
 

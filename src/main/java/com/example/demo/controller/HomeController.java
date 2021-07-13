@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class HomeController {
@@ -35,11 +36,15 @@ public class HomeController {
     @Autowired
     TagService tagService;
     @Autowired
+    TagMapper tagMapper;
+    @Autowired
     UserMapper userMapper;
     @Autowired
-    PostRepository postRepository;
-    @Autowired
-    TagRepository tagRepository;
+    PostMapper postMapper;
+//    @Autowired
+//    PostRepository postRepository;
+//    @Autowired
+//    TagRepository tagRepository;
 
     @GetMapping("/")
     public String home() {
@@ -59,7 +64,7 @@ public class HomeController {
 
         Page<Post> page = postService.listAll(pageNum, sortField, sortDir);
 
-        List<Post> posts = page.getContent();
+        Page<PostDTO> posts = postService.listAllDTO(pageNum, sortField, sortDir);
 
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -68,35 +73,14 @@ public class HomeController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
-        List<Tag> tags = tagService.getAllTag();
+        List<Tag> tagList = tagService.getAllTag();
+        List<TagDTO> tags = tagMapper.tagsToTagDTOS(tagList);
         model.addAttribute("posts", posts);
         model.addAttribute("tags", tags);
         return "index";
     }
 
-    @GetMapping("/postsByTag")
-    public String getPostByTag(Model model, @RequestParam("tagId") int tagId) {
-        List<Tag> tags = tagService.getAllTag();
-        List<Post> posts = postService.findPostByTagId(tagId);
-        model.addAttribute("tags", tags);
-        model.addAttribute("posts", posts);
-        return "postsByTag";
-    }
 
-    @GetMapping("/user")
-    public String userPage(Model model, Principal principal) {
-        User user = userService.findUserByUsername(principal.getName());
-        UserDTO personal = userMapper.userToUserDTO(user);
-        model.addAttribute("personal", personal);
-        return "user";
-    }
-
-    @GetMapping("/user/{name}")
-    public String userPage(@PathVariable("name") String name, Model model) {
-        User personal = userService.findUserByUsername(name);
-        model.addAttribute("personal", personal);
-        return "user";
-    }
 
     @GetMapping("/login")
     public String loginPage() {
@@ -108,10 +92,10 @@ public class HomeController {
         return "signup";
     }
 
-    @GetMapping("/admin")
-    public String adminPage() {
-        return "admin";
-    }
+//    @GetMapping("/admin")
+//    public String adminPage() {
+//        return "admin";
+//    }
 
 //    @GetMapping("/error")
 //    public String errorPage() {

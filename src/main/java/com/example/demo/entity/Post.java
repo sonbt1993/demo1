@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 
 
 @NoArgsConstructor
@@ -55,7 +51,7 @@ public class Post {
     @JoinTable(name = "post_tag",
             joinColumns = @JoinColumn(name = "postId"),
             inverseJoinColumns = @JoinColumn(name = "tagId"))
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -105,11 +101,11 @@ public class Post {
         this.author = author;
     }
 
-    public Set<Tag> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 }
