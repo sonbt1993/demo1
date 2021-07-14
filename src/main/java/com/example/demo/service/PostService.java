@@ -13,9 +13,8 @@ public interface PostService {
     List<Post> getAllPost();
     List<Post> getAllPostOfUser(User user);
 
-    Post getPostById(Long id);
     void addPostIntoUser(Post post);
-    Post editPostById(Long id);
+    Post findPostById(Long id);
     void deletePostById(Long id);
     Long findUserIdByPostId(Long postId);
     List<Post> findPostByTagId (int tagId);

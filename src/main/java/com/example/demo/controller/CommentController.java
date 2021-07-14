@@ -27,7 +27,7 @@ public class CommentController {
                               Principal principal) {
         User user = userService.findUserByUsername(principal.getName());
         comment.setCommenter(user);
-        comment.setPost(postService.getPostById(postId));
+        comment.setPost(postService.findPostById(postId));
         commentService.save(comment);
         return "redirect:/post/" + postId;
     }

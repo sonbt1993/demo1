@@ -74,20 +74,20 @@
                 </div>
                 <!-- Side widgets-->
                 <div class="col-lg-4">
-                    <div class="card mb-4">
-                        <div class="card-header">Categories</div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0" >
-                                        <th:block th:each="tag : ${tags}">
-                                            <li><a href="#!" th:utext="${tag.name}"></a></li>
-                                        </th:block>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!--                    <div class="card mb-4">-->
+    <!--                        <div class="card-header">Categories</div>-->
+    <!--                        <div class="card-body">-->
+    <!--                            <div class="row">-->
+    <!--                                <div class="col-sm-6">-->
+    <!--                                    <ul class="list-unstyled mb-0" >-->
+    <!--                                        <th:block th:each="tag : ${tags}">-->
+    <!--                                            <li><a href="#!" th:utext="${tag.name}"></a></li>-->
+    <!--                                        </th:block>-->
+    <!--                                    </ul>-->
+    <!--                                </div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
                     <!-- Side widget-->
                     <div class="card mb-4" sec:authorize="isAuthenticated()" th:if="${accessingUserDTO.id} == ${authorDTO.getId()}">
                         <div class="card-header">Side Widget</div>

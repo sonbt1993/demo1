@@ -22,7 +22,8 @@
 </header>
 <!-- Page content-->
 <div class="container">
-  <form class="row g-3" th:action="@{/admin/users/saveUser}" th:object="${user}" method="post"  >
+  <form class="row g-3" th:action="@{/admin/users/edit}" th:object="${user}" method="post"  >
+    <input type="hidden" th:field="*{id}"><br>
     <div class="col-md-4">
       <label for="validationDefaultUsername" class="form-label">Username</label>
       <div class="input-group">

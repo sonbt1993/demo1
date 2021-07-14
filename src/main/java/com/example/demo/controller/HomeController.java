@@ -2,49 +2,46 @@ package com.example.demo.controller;
 
 
 import com.example.demo.DTO.*;
-import com.example.demo.entity.Post;
-import com.example.demo.entity.Tag;
-import com.example.demo.entity.User;
-import com.example.demo.repository.PostRepository;
-import com.example.demo.repository.TagRepository;
-import com.example.demo.service.PostService;
-import com.example.demo.service.TagService;
-import com.example.demo.service.UserService;
+import com.example.demo.entity.*;
+import com.example.demo.repository.ChatRepository;
+import com.example.demo.service.*;
+import com.example.demo.shceduler.Chat;
+//import com.example.demo.shceduler.ExpiredScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class HomeController {
     @Autowired
     private MessageSource messageSource;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    PostService postService;
+    private RoleService roleService;
     @Autowired
-    TagService tagService;
+    private PostService postService;
     @Autowired
-    TagMapper tagMapper;
+    private TagService tagService;
     @Autowired
-    UserMapper userMapper;
+    private TagMapper tagMapper;
     @Autowired
-    PostMapper postMapper;
-//    @Autowired
-//    PostRepository postRepository;
-//    @Autowired
-//    TagRepository tagRepository;
+    private UserMapper userMapper;
+    @Autowired
+    private PostMapper postMapper;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired private ChatRepository chatRepository;
+
 
     @GetMapping("/")
     public String home() {
@@ -77,31 +74,47 @@ public class HomeController {
         List<TagDTO> tags = tagMapper.tagsToTagDTOS(tagList);
         model.addAttribute("posts", posts);
         model.addAttribute("tags", tags);
+
         return "index";
     }
 
+    @GetMapping("/signup")
+    public String signUpPage( Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        return "signUp";
+    }
 
+    @PostMapping("/signup")
+    public String saveSignUpPage(@ModelAttribute(name = "user") User user){
+        String newUserUsername = user.getUsername();
+        User account = userService.findUserByUsername(newUserUsername);
+        int memberRoleId = 3;
+        if(account!=null){
+            return "error";
+        }
+        user.setRole(roleService.findRoleById(memberRoleId));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.save(user);
+        return "redirect:/";
+    }
 
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
-    @GetMapping("/signup")
-    public String signUpPage() {
-        return "signup";
+
+    @GetMapping("/error")
+    public String errorPage() {
+        return "error";
     }
 
-//    @GetMapping("/admin")
-//    public String adminPage() {
-//        return "admin";
-//    }
-
-//    @GetMapping("/error")
-//    public String errorPage() {
-//        return "error";
-//    }
-
-
+    @GetMapping("/scheduler")
+    public String scheduler(Model model) {
+        List<Chat> chatList = chatRepository.findAll();
+        model.addAttribute(chatList);
+        return "scheduler";
+    }
 
 }

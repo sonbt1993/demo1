@@ -26,17 +26,17 @@ import java.util.List;
 @Controller
 public class AdminController {
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    PostService postService;
+    private PostService postService;
     @Autowired
-    TagService tagService;
+    private TagService tagService;
     @Autowired
-    RoleService roleService;
+    private RoleService roleService;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
 
     @GetMapping("/admin/adminPage")
@@ -83,7 +83,7 @@ public class AdminController {
     @GetMapping("/admin/users/delete/{userId}")
     public String deleteUser( Model model, @PathVariable("userId") Long userId) {
         userService.deleteById(userId);
-        return "redirect:/admin/users";
+        return "redirect:/admin/users/1?sortField=id&sortDir=asc";
     }
 
     @GetMapping("/admin/users/createUser")
@@ -91,31 +91,30 @@ public class AdminController {
         List<Role> roles = roleService.findAll();
         User user = new User();
         model.addAttribute("roles", roles);
-//        model.addAttribute("userRole", userRole);
-        model.addAttribute("user", user);
-        return "addUser";
-    }
-
-    @GetMapping("/admin/users/editUser")
-    public String editUser( Model model, @RequestParam("userId") Long userId ) {
-
-        List<Role> roles = roleService.findAll();
-        User user = userService.findUserById(userId);
-        if(user==null){
-            return "error";
-        };
-        model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         return "addUser";
     }
 
     @PostMapping("/admin/users/saveUser")
-    public String saveNewUser(Model model, @ModelAttribute(name = "user") User user) {
-        String newUserUsername = user.getUsername();
-        User oldUser = userService.findUserByUsername(newUserUsername);
-        if(oldUser!=null){
-            return "error";
-        };
+    public String saveNewUser(@ModelAttribute(name = "user") User user) {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.save(user);
+        return "redirect:/admin/users/1?sortField=id&sortDir=asc";
+    }
+
+    @GetMapping("/admin/users/edit")
+    public String editUser( Model model, @RequestParam("userId") Long userId ) {
+
+        List<Role> roles = roleService.findAll();
+        User user = userService.findUserById(userId);
+        model.addAttribute("roles", roles);
+        model.addAttribute("user", user);
+        return "editUser";
+    }
+
+    @PostMapping("/admin/users/edit")
+    public String saveEditUser(@ModelAttribute(name = "user") User user) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);

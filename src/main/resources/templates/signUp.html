@@ -22,7 +22,7 @@
 </header>
 <!-- Page content-->
 <div class="container">
-  <form class="row g-3" th:action="@{/admin/users/saveUser}" th:object="${user}" method="post"  >
+  <form class="row g-3" th:action="@{/signup}"  method="post"  >
     <div class="col-md-4">
       <label for="validationDefaultUsername" class="form-label">Username</label>
       <div class="input-group">
@@ -34,17 +34,8 @@
       <input type="email" th:field="${user.email}"  class="form-control" id="validationDefault03" required>
     </div>
     <div class="col-md-3">
-      <label for="validationDefault04" class="form-label">Role</label>
-      <select class="form-select"   th:field="${user.role.id}" id="validationDefault04" required>
-        <option  th:each="userRole :${roles}"
-                 th:value="${userRole.id}"
-                 th:text="${userRole.name}">Choose...</option>
-
-      </select>
-    </div>
-    <div class="col-md-3">
       <label for="validationDefault05" class="form-label">Password</label>
-      <input type="password" th:field="${user.password}" class="form-control" id="validationDefault05" required>
+      <input type="text" th:field="${user.password}" class="form-control" id="validationDefault05" required>
     </div>
     <div class="col-12">
       <div class="form-check">

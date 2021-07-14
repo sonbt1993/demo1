@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         // Được quyền truy cập khi chưa login
-        http.authorizeRequests().antMatchers("/login", "/signup", "/", "/post", "/post/@\"^\\d$\"","/sendHtmlEmail", "/sendmail").permitAll();
+        http.authorizeRequests().antMatchers("/login", "/signup", "/", "/post", "/post/@\"^\\d$\"","/sendHtmlEmail", "/sendmail", "/scheduler").permitAll();
 
         // Có những quyền Admin, Mod, Member sẽ được truy cập
         http.authorizeRequests().antMatchers("/user/*" , "/post/add", "/post/edit", "/comment").hasAnyAuthority("Admin", "Member", "Mod");

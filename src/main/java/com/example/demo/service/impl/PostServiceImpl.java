@@ -10,10 +10,11 @@ import com.example.demo.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class PostServiceImpl implements PostService {
     @Autowired
@@ -32,19 +33,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getPostById(Long id) {
-        Optional<Post> post = postRepository.findById(id);
-        return post.orElse(null);
-    }
-
-    @Override
     public void addPostIntoUser(Post post) {
         postRepository.save(post);
     }
 
     @Override
-    public Post editPostById(Long id) {
-        return postRepository.findById(id).get();
+    public Post findPostById(Long id) {
+        return postRepository.findPostById(id);
     }
 
     @Override
@@ -64,7 +59,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> listAll(int pageNum, String sortField, String sortDir) {
-        Pageable pageable = PageRequest.of(pageNum - 1, 4,
+        Pageable pageable = PageRequest.of(pageNum - 1, 3,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending()
                         : Sort.by(sortField).descending()
         );
@@ -73,7 +68,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDTO> listAllDTO(int pageNum, String sortField, String sortDir) {
-        Pageable pageable = PageRequest.of(pageNum - 1, 4,
+        Pageable pageable = PageRequest.of(pageNum - 1, 3,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending()
                         : Sort.by(sortField).descending()
         );

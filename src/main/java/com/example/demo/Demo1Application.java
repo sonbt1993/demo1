@@ -11,6 +11,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @SpringBootApplication
 public class Demo1Application {
+
     @Autowired
     private ThymeleafProperties properties;
 

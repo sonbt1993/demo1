@@ -15,5 +15,5 @@ public class PostDTO {
     private String content;
     private LocalDateTime lastUpdate;
     private UserDTO author;
-    private List<TagDTO> tags;
+    private List<Tag> Tags;
 }

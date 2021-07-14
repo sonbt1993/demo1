@@ -1,26 +1,34 @@
-package com.example.demo.controller;
+package com.example.demo.service;
 
 import com.example.demo.config.MyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-@Controller
-public class MailController {
+@Service
+public class CronJobService {
+
+    // Replace with your email here:
+    public static final String MY_EMAIL = "sonbuitung663@gmail.com";
+
+    // Replace password!!
+    public static final String MY_PASSWORD = "10220119";
+
+    // And receiver!
+    public static final String FRIEND_EMAIL = "son.buitung.ncc@gmail.com";
 
     @Autowired
     private JavaMailSender emailSender;
 
-    @ResponseBody
-    @RequestMapping("/sendHtmlEmail")
-    public String sendHtmlEmail() throws MessagingException {
 
+    @Scheduled(fixedDelay = 1 * 1000 * 60)
+//    @Scheduled(cron = "0 0 12 * * ?")
+    public void CronJobService() throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
 
         boolean multipart = true;
@@ -37,7 +45,7 @@ public class MailController {
         helper.setSubject("Test send HTML email");
 
         this.emailSender.send(message);
-
-        return "Email Sent!";
     }
+
+
 }

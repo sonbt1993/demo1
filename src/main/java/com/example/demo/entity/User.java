@@ -20,8 +20,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
     private String password;
-    @NaturalId
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
     @ManyToOne
@@ -34,7 +33,7 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
 
     //Một User viết nhiều Comment
     @OneToMany(

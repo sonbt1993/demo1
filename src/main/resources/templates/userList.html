@@ -47,7 +47,7 @@
           <td th:text="${userDTO.getEmail()}"></td>
           <td th:text="${userDTO.getRole().getName()}"></td>
           <td>
-            <a class="btn btn-primary" th:href="@{/admin/users/editUser(userId=${userDTO.getId()})}">Edit</a>
+            <a class="btn btn-primary" th:href="@{/admin/users/edit(userId=${userDTO.getId()})}">Edit</a>
             <a class="btn btn-primary" th:href="@{'/admin/users/delete/'+ ${userDTO.id}}">Delete</a>
           </td>
         </tr>

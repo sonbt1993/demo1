@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.DTO.*;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Post;
+import com.example.demo.entity.Tag;
 import com.example.demo.entity.User;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.PostService;
@@ -21,21 +22,21 @@ import java.util.List;
 @Controller
 public class PostController {
     @Autowired
-    PostService postService;
+    private PostService postService;
     @Autowired
-    TagService tagService;
+    private TagService tagService;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired
-    CommentMapper commentMapper;
+    private CommentMapper commentMapper;
     @Autowired
-    TagMapper tagMapper;
+    private TagMapper tagMapper;
     @Autowired
-    PostMapper postMapper;
+    private PostMapper postMapper;
 
     @GetMapping("/post/{postId}")
     public String postDetail(Model model, @PathVariable("postId") Long postId, Principal principal ) {
@@ -45,26 +46,19 @@ public class PostController {
             model.addAttribute("accessingUserDTO", accessingUserDTO);
         };
 
-        Post post =  postService.getPostById(postId);
+        Post post =  postService.findPostById(postId);
         PostDTO postDTO = postMapper.postToPostDTO(post);
         List<Comment> comments = post.getComments();
-        List<CommentDTO> commentDTOList = commentMapper.commentsToCommentDTOS(comments);
 
-        if(post==null){
-            return "error";
-        };
         User author = post.getAuthor();
-
-//        Long authorId = postService.findUserIdByPostId(postId);
-//        User author = userService.findUserById(authorId);
 
         UserDTO authorDTO = userMapper.userToUserDTO(author);
         if (postId != null){
             model.addAttribute("comment", new Comment());
             model.addAttribute("comments", comments);
-            model.addAttribute("postDTO", post);
-            model.addAttribute("tags", tagService.getAllTag());            ;
-            model.addAttribute("postTags", post.getTags());
+            model.addAttribute("postDTO", postDTO);
+            model.addAttribute("tags", tagMapper.tagsToTagDTOS( tagService.getAllTag()) );            ;
+            model.addAttribute("postTags", postDTO.getTags());
             model.addAttribute("authorDTO", authorDTO);
         }
         return "post";
@@ -72,7 +66,8 @@ public class PostController {
 
     @GetMapping("/post/add")
     public String addPost( Model model) {
-        model.addAttribute("tags", tagService.getAllTag());
+        List<Tag> tags = tagService.getAllTag();
+        model.addAttribute("tags", tags);
         model.addAttribute("post", new Post());
         return "addPost";
     }
@@ -87,22 +82,20 @@ public class PostController {
 
     @GetMapping("/post/edit")
     public String editPost(@RequestParam("postId") Long postId, Model model ) {
-        Post post = postService.getPostById(postId);
+
+        Post post = postService.findPostById(postId);
         User user = post.getAuthor();
         UserDTO author = userMapper.userToUserDTO(user);
-        if(post==null){
-            return "error";
-        };
-        model.addAttribute("tags", tagService.getAllTag());
+        List<Tag> tags = tagService.getAllTag();
+        model.addAttribute("tags", tags);
         model.addAttribute("author", author);
         model.addAttribute("post", post);
         return "addPost";
     }
 
     @PostMapping("/post/edit")
-    public String saveEditPost(Model model, @ModelAttribute(name = "post") Post post,
+    public String saveEditPost(@ModelAttribute(name = "post") Post post,
                                @ModelAttribute(name = "author") UserDTO author){
-
         User user = userService.findUserById(author.getId());
         post.setAuthor(user);
         postService.addPostIntoUser(post);

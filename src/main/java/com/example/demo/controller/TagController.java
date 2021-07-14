@@ -16,7 +16,7 @@ import java.util.List;
 @Controller
 public class TagController {
     @Autowired
-    TagService tagService;
+    private TagService tagService;
 
     @GetMapping("/admin/tags")
     public String tagList(Model model){
