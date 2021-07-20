@@ -8,7 +8,7 @@
   <meta name="author" content="" />
   <title>Blog Home - Start Bootstrap Template</title>
   <!-- Favicon-->
-  <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
   <!-- Core theme CSS (includes Bootstrap)-->
   <link th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
@@ -24,12 +24,13 @@
 <div class="container">
   <form class="row g-3" th:action="@{/admin/users/edit}" th:object="${user}" method="post"  >
     <input type="hidden" th:field="*{id}"><br>
-    <div class="col-md-4">
-      <label for="validationDefaultUsername" class="form-label">Username</label>
-      <div class="input-group">
-        <input type="text" th:field="${user.username}" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
-      </div>
-    </div>
+    <input type="hidden" th:field="*{username}"><br>
+<!--    <div class="col-md-4">-->
+<!--      <label for="validationDefaultUsername" class="form-label">Username</label>-->
+<!--      <div class="input-group">-->
+<!--        <input type="text" th:field="${user.username}" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>-->
+<!--      </div>-->
+<!--    </div>-->
     <div class="col-md-6">
       <label for="validationDefault03" class="form-label">Email</label>
       <input type="email" th:field="${user.email}"  class="form-control" id="validationDefault03" required>

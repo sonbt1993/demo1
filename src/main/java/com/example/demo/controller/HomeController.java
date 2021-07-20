@@ -5,15 +5,19 @@ import com.example.demo.DTO.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.ChatRepository;
 import com.example.demo.service.*;
-import com.example.demo.shceduler.Chat;
+import com.example.demo.utils.Chat;
 //import com.example.demo.shceduler.ExpiredScheduler;
+import com.example.demo.utils.TagValidator;
+import com.example.demo.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +46,23 @@ public class HomeController {
 
     @Autowired private ChatRepository chatRepository;
 
+    @Autowired
+    private UserValidator userValidator;
+    @Autowired
+    private TagValidator tagValidator;
+
+    @InitBinder
+    public void myInitBinder(WebDataBinder dataBinder) {
+        Object target = dataBinder.getTarget();
+        if (target == null) {
+            return;
+        }
+        System.out.println("Target=" + target);
+
+        if (target.getClass() == User.class) {
+            dataBinder.setValidator(userValidator);
+        }
+    }
 
     @GetMapping("/")
     public String home() {
@@ -86,7 +107,10 @@ public class HomeController {
     }
 
     @PostMapping("/signup")
-    public String saveSignUpPage(@ModelAttribute(name = "user") User user){
+    public String saveSignUpPage(@ModelAttribute(name = "user")@Validated User user, BindingResult result){
+        if (result.hasErrors()) {
+            return "signup";
+        }
         String newUserUsername = user.getUsername();
         User account = userService.findUserByUsername(newUserUsername);
         int memberRoleId = 3;
@@ -110,11 +134,11 @@ public class HomeController {
         return "error";
     }
 
-    @GetMapping("/scheduler")
-    public String scheduler(Model model) {
-        List<Chat> chatList = chatRepository.findAll();
-        model.addAttribute(chatList);
-        return "scheduler";
-    }
+//    @GetMapping("/scheduler")
+//    public String scheduler(Model model) {
+//        List<Chat> chatList = chatRepository.findAll();
+//        model.addAttribute(chatList);
+//        return "scheduler";
+//    }
 
 }

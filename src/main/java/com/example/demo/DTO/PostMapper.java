@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {
-    PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
     PostDTO postToPostDTO(Post post);
     List<PostDTO> postsToPostDTOS(List<Post> posts);
 }

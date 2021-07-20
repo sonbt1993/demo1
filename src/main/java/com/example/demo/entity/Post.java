@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -22,6 +21,9 @@ public class Post {
     private String title;
     private String content;
     private LocalDateTime lastUpdate;
+    private String image;
+
+
     @PrePersist //Trước khi lưu khi khởi tạo record
     public void prePersist() {
         lastUpdate = LocalDateTime.now();
@@ -52,6 +54,8 @@ public class Post {
             joinColumns = @JoinColumn(name = "postId"),
             inverseJoinColumns = @JoinColumn(name = "tagId"))
     private List<Tag> tags = new ArrayList<>();
+
+
 
     public Long getId() {
         return id;
@@ -109,5 +113,12 @@ public class Post {
         this.tags = tags;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
 }

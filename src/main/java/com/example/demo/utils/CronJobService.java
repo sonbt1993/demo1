@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.utils;
 
 import com.example.demo.config.MyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,9 @@ public class CronJobService {
 
 
     @Scheduled(fixedDelay = 1 * 1000 * 60)
-//    @Scheduled(cron = "0 0 12 * * ?")
+//    @Scheduled(cron = "*/1 * * * * ?")
     public void CronJobService() throws MessagingException {
+
         MimeMessage message = emailSender.createMimeMessage();
 
         boolean multipart = true;

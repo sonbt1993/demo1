@@ -12,6 +12,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Optional;
 @Transactional(rollbackFor = Exception.class)
@@ -21,6 +23,16 @@ public class PostServiceImpl implements PostService {
     PostRepository postRepository;
     @Autowired
     PostMapper postMapper;
+
+    @PostConstruct
+    public void postConstruct(){
+        System.out.println("\t>> Đối tượng PostService sau khi khởi tạo xong sẽ chạy hàm này");
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        System.out.println("\t>> Đối tượng PostService trước khi bị destroy thì chạy hàm này");
+    }
 
     @Override
     public List<Post> getAllPost() {

@@ -8,7 +8,7 @@
         <meta name="author" content="" />
         <title>Blog Home - Start Bootstrap Template</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link th:href="@{/css/styles.css}" rel="stylesheet" />
     </head>
@@ -41,7 +41,7 @@
                             <div class="card-body">
                                 <div class="small text-muted" th:text="${#temporals.format(post.getLastUpdate(), 'dd/MM/yyy HH:mm')}">January 1, 2021</div>
                                 <h2 class="card-title h4" th:text = "${post.title}" ></h2>
-                                <p class="card-text" th:text = "${post.content}"></p>
+<!--                                <p class="card-text" th:text = "${post.content}"></p>-->
                                 <a class="btn btn-primary" th:href="@{'/post/' + ${post.id}}">Read more →</a>
                             </div>
                         </div>

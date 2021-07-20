@@ -2,7 +2,9 @@ package com.example.demo.DTO;
 
 import com.example.demo.entity.Tag;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -16,4 +18,7 @@ public class PostDTO {
     private LocalDateTime lastUpdate;
     private UserDTO author;
     private List<Tag> Tags;
+    private String image;
+
+
 }

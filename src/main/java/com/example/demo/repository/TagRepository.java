@@ -13,6 +13,7 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
     List<Tag> getAllTag();
     Tag save(Tag tag);
     Tag findById(int Id);
+    Tag findTagByName(String name);
 
 
 //    List<Tag> getAllByPost(Post post);

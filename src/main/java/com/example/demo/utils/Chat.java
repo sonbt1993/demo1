@@ -1,4 +1,4 @@
-package com.example.demo.shceduler;
+package com.example.demo.utils;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -9,7 +9,7 @@
         <meta name="author" content="" />
         <title>Blog Post - Start Bootstrap Template</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" th:href="@{assets/favicon.ico}" />
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link th:href="@{/css/detail.css}" rel="stylesheet" />
     </head>
@@ -35,20 +35,24 @@
                             </th:block>
 
                         </header>
-                        <!-- Preview image figure-->
-<!--                        <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>-->
-                        <!-- Post content-->
-                        <section class="mb-5">
-                            <p class="fs-5 mb-4" th:text ="${postDTO.content}" ></p>
 
+                        <section class="mb-5">
+                            <div class="card mb-4">
+                                <img th:src="@{'/images/' + ${postDTO.getAuthor().getId()} + '/' + ${postDTO.getImage()}}">
+<!--                                <img src="/images/1/download-(1).jpg">-->
+                            </div>
+                            <p class="fs-5 mb-4" th:text ="${postDTO.content}" ></p>
+                            <span th:text="${postDTO.getImage()}"></span>
                         </section>
+
+
                     </article>
                     <!-- Comments section-->
-                    <section class="mb-5">
+                    <section class="mb-5" >
                         <div class="card bg-light">
                             <div class="card-body">
                                 <!-- Comment form-->
-                                <form class="mb-4" th:action="@{/post/comment/{postId}(postId=${postDTO.id})}" th:object="${comment}" method="post">
+                                <form class="mb-4" sec:authorize="isAuthenticated()" th:action="@{/post/comment/{postId}(postId=${postDTO.id})}" th:object="${comment}" method="post">
                                     <textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!" th:field="*{content}"></textarea>
                                     <input type="submit" value="Save">
                                 </form>
@@ -74,21 +78,7 @@
                 </div>
                 <!-- Side widgets-->
                 <div class="col-lg-4">
-    <!--                    <div class="card mb-4">-->
-    <!--                        <div class="card-header">Categories</div>-->
-    <!--                        <div class="card-body">-->
-    <!--                            <div class="row">-->
-    <!--                                <div class="col-sm-6">-->
-    <!--                                    <ul class="list-unstyled mb-0" >-->
-    <!--                                        <th:block th:each="tag : ${tags}">-->
-    <!--                                            <li><a href="#!" th:utext="${tag.name}"></a></li>-->
-    <!--                                        </th:block>-->
-    <!--                                    </ul>-->
-    <!--                                </div>-->
-    <!--                            </div>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-                    <!-- Side widget-->
+
                     <div class="card mb-4" sec:authorize="isAuthenticated()" th:if="${accessingUserDTO.id} == ${authorDTO.getId()}">
                         <div class="card-header">Side Widget</div>
                         <div class="card-body" >

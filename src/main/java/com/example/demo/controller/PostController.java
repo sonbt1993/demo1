@@ -9,13 +9,18 @@ import com.example.demo.service.CommentService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.TagService;
 import com.example.demo.service.UserService;
+import com.example.demo.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -28,15 +33,14 @@ public class PostController {
     @Autowired
     private UserService userService;
     @Autowired
-    private CommentService commentService;
-    @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private CommentMapper commentMapper;
     @Autowired
     private TagMapper tagMapper;
     @Autowired
     private PostMapper postMapper;
+
+    @Value("${upload.path}")
+    private String path;
 
     @GetMapping("/post/{postId}")
     public String postDetail(Model model, @PathVariable("postId") Long postId, Principal principal ) {
@@ -48,6 +52,7 @@ public class PostController {
 
         Post post =  postService.findPostById(postId);
         PostDTO postDTO = postMapper.postToPostDTO(post);
+//        postDTO.setImage(post.getImage());
         List<Comment> comments = post.getComments();
 
         User author = post.getAuthor();
@@ -56,11 +61,13 @@ public class PostController {
         if (postId != null){
             model.addAttribute("comment", new Comment());
             model.addAttribute("comments", comments);
+            model.addAttribute("post", post);
             model.addAttribute("postDTO", postDTO);
             model.addAttribute("tags", tagMapper.tagsToTagDTOS( tagService.getAllTag()) );            ;
             model.addAttribute("postTags", postDTO.getTags());
             model.addAttribute("authorDTO", authorDTO);
         }
+
         return "post";
     }
 
@@ -73,10 +80,17 @@ public class PostController {
     }
 
     @PostMapping("/post/add")
-    public String saveNewPost(Model model, @ModelAttribute(name = "post") Post post, Principal principal){
+    public String saveNewPost(Model model, @ModelAttribute(name = "post") Post post,
+                              @RequestParam("photo") MultipartFile multipartFile,
+                                Principal principal) throws IOException {
+
         User personal = userService.findUserByUsername(principal.getName());
         post.setAuthor(personal);
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        post.setImage(fileName);
         postService.addPostIntoUser(post);
+        String uploadDir = path + "/images/" + personal.getId();
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         return "redirect:/post/" + post.getId();
     }
 
@@ -95,10 +109,15 @@ public class PostController {
 
     @PostMapping("/post/edit")
     public String saveEditPost(@ModelAttribute(name = "post") Post post,
-                               @ModelAttribute(name = "author") UserDTO author){
+                               @ModelAttribute(name = "author") UserDTO author,
+                               @RequestParam("photo") MultipartFile multipartFile) throws IOException {
         User user = userService.findUserById(author.getId());
         post.setAuthor(user);
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        post.setImage(fileName);
         postService.addPostIntoUser(post);
+        String uploadDir = path + "/images/" + user.getId();
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         return "redirect:/post/" + post.getId();
     }
 

@@ -20,7 +20,7 @@
   <meta name="author" content="" />
   <title>Blog Home - Start Bootstrap Template</title>
   <!-- Favicon-->
-  <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
   <!-- Core theme CSS (includes Bootstrap)-->
   <link th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
@@ -32,19 +32,7 @@
     <!-- Blog entries-->
     <div id="content">
 
-<!--      <form th:action="@{/post/add}" th:object="${post}" method="post">-->
-<!--        <th:block th:each="tag : ${tags}">-->
-<!--          <input type="checkbox" th:field="*{tags}" th:text="${tag.name}" th:value="${tag.id}">-->
-<!--        </th:block><br>-->
-<!--        <input type="hidden" th:field="*{id}"><br>-->
-<!--        <label>Title</label><br>-->
-<!--        <input type="text" th:field="*{title}"><br>-->
-<!--        <label>Content</label><br>-->
-<!--        <textarea rows="9" cols="60" th:field="*{content}" th:text="*{content}"></textarea><br>-->
-<!--        <input type="submit" value="Save">-->
-<!--      </form>-->
-
-        <form class="row g-3" th:action="@{/post/add}"  th:object="${post}" method="post" >
+        <form class="row g-3" enctype="multipart/form-data" th:action="@{/post/add}"  th:object="${post}" method="post" >
             <th:block th:each="tag : ${tags}">
           <div class="col-auto">
             <input th:field="*{tags}" th:text="${tag.name}" th:value="${tag.id}" class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
@@ -59,11 +47,15 @@
         </div>
         <div class="mb-3">
           <label for="validationTextarea" class="form-label">Textarea</label>
-          <textarea th:field="*{content}" class="form-control is-invalid" id="validationTextarea" placeholder="Required example textarea" rows="6" required></textarea>
+          <textarea th:field="*{content}" class="form-control" id="validationTextarea" placeholder="Required example textarea" rows="6" required></textarea>
           <div class="invalid-feedback">
             Please enter content in the textarea.
           </div>
         </div>
+            <div>
+                <label>Photos: </label>
+                <input type="file" name="photo" accept="image/png, image/jpeg" />
+            </div>
         <div class="col-12">
           <button class="btn btn-primary" type="submit" value="Save">Submit</button>
         </div>

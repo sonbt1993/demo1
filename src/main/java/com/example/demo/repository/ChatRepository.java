@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.shceduler.Chat;
+import com.example.demo.utils.Chat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.PostDTO;
 import com.example.demo.DTO.UserDTO;
 import com.example.demo.DTO.UserMapper;
 import com.example.demo.entity.Post;
@@ -12,11 +13,16 @@ import com.example.demo.service.PostService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.TagService;
 import com.example.demo.service.UserService;
+import com.example.demo.utils.TagValidator;
+import com.example.demo.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,7 +30,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-public class AdminController {
+public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
@@ -37,6 +43,23 @@ public class AdminController {
     private RoleService roleService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserValidator userValidator;
+
+    @InitBinder
+    public void myInitBinder(WebDataBinder dataBinder) {
+        Object target = dataBinder.getTarget();
+        if (target == null) {
+            return;
+        }
+        System.out.println("Target=" + target);
+
+        if (target.getClass() == User.class) {
+            dataBinder.setValidator(userValidator);
+        }
+
+
+    }
 
 
     @GetMapping("/admin/adminPage")
@@ -48,11 +71,13 @@ public class AdminController {
     public String postList(Model model, Principal principal, @PathVariable(name = "pageNum") int pageNum,
                            @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir){
         List<Tag> tags = tagService.getAllTag();
-        List<Post> posts = postService.getAllPost();
-        model.addAttribute("posts", posts);
-        model.addAttribute("tags", tags);
+//        List<Post> posts = postService.getAllPost();
 
-        Page<Post> postPage = postService.listAll(pageNum, sortField, sortDir);
+
+//        Page<Post> postPage = postService.listAll(pageNum, sortField, sortDir);
+        Page<PostDTO> postPage = postService.listAllDTO(pageNum, sortField, sortDir);
+//        model.addAttribute("posts", postPage);
+        model.addAttribute("tags", tags);
         model.addAttribute("postPage", postPage);
 
         model.addAttribute("currentPage", pageNum);
@@ -96,8 +121,10 @@ public class AdminController {
     }
 
     @PostMapping("/admin/users/saveUser")
-    public String saveNewUser(@ModelAttribute(name = "user") User user) {
-
+    public String saveNewUser(@ModelAttribute(name = "user")@Validated User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "addUser";
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return "redirect:/admin/users/1?sortField=id&sortDir=asc";
@@ -115,7 +142,6 @@ public class AdminController {
 
     @PostMapping("/admin/users/edit")
     public String saveEditUser(@ModelAttribute(name = "user") User user) {
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return "redirect:/admin/users/1?sortField=id&sortDir=asc";
