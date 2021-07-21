@@ -8,11 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UserService {
-    List<User> findAll();
     User findUserByUsername(String username);
-    User findUserByEmail( String email);
     User findUserById(Long id);
-    Page<User> listAll(int pageNum, String sortField, String sortDir);
     Page<UserDTO> getUserDTOs(int pageNum, String sortField, String sortDir);
     void deleteById(Long userId);
     User save(User user);

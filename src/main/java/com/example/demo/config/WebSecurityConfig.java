@@ -42,19 +42,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         // Được quyền truy cập khi chưa login
-        http.authorizeRequests().antMatchers("/login", "/signup", "/", "/post", "/post/@\"^\\d$\"","/sendHtmlEmail", "/sendmail", "/scheduler", "/images/**").permitAll();
+        http.authorizeRequests().antMatchers("/login", "/signup", "/", "/images/**", "/post").permitAll();
 
         // Có những quyền Admin, Mod, Member sẽ được truy cập
-        http.authorizeRequests().antMatchers("/user/*" , "/post/add", "/post/edit", "/comment").hasAnyAuthority("Admin", "Member", "Mod");
+        http.authorizeRequests().antMatchers("/user", "/comment").hasAnyAuthority("Admin", "Member", "Mod");
 
         //chỉ có quyền Admin, Mod mới được truy cập
-        http.authorizeRequests().antMatchers("/admin/adminPage", "/admin/tags/**","/admin/posts/**").hasAnyAuthority("Admin", "Mod");
+        http.authorizeRequests().antMatchers( "/post/edit", "/post/add", "/admin", "/admin/adminPage", "/admin/tags/**","/admin/posts/**").hasAnyAuthority("Admin", "Mod");
 
         //chỉ có quyền Admin mới được truy cập
-        http.authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("Admin");
+        http.authorizeRequests().antMatchers("/admin/users/**").hasAnyAuthority("Admin");
 
-        // Khi không đủ quyền truy cập sẽ bị chuyển hướng
-        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error");
+//        // Khi không đủ quyền truy cập sẽ bị chuyển hướng
+//        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error");
 
         // Custom login
         http.authorizeRequests().and().formLogin()

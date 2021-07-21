@@ -3,11 +3,8 @@ package com.example.demo.controller;
 
 import com.example.demo.DTO.*;
 import com.example.demo.entity.*;
-import com.example.demo.repository.ChatRepository;
 import com.example.demo.service.*;
-import com.example.demo.utils.Chat;
 //import com.example.demo.shceduler.ExpiredScheduler;
-import com.example.demo.utils.TagValidator;
 import com.example.demo.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -20,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -38,18 +37,20 @@ public class HomeController {
     @Autowired
     private TagMapper tagMapper;
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private PostMapper postMapper;
-    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired private ChatRepository chatRepository;
-
     @Autowired
     private UserValidator userValidator;
-    @Autowired
-    private TagValidator tagValidator;
+
+
+    @PostConstruct
+    public void postConstruct(){
+        System.out.println("\t>> Đối tượng HomeController sau khi khởi tạo xong sẽ chạy hàm này");
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        System.out.println("\t>> Đối tượng HomeController trước khi bị destroy thì chạy hàm này");
+    }
 
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -109,14 +110,9 @@ public class HomeController {
     @PostMapping("/signup")
     public String saveSignUpPage(@ModelAttribute(name = "user")@Validated User user, BindingResult result){
         if (result.hasErrors()) {
-            return "signup";
+            return "signUp";
         }
-        String newUserUsername = user.getUsername();
-        User account = userService.findUserByUsername(newUserUsername);
-        int memberRoleId = 3;
-        if(account!=null){
-            return "error";
-        }
+        Integer memberRoleId = 3;
         user.setRole(roleService.findRoleById(memberRoleId));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
@@ -129,10 +125,10 @@ public class HomeController {
     }
 
 
-    @GetMapping("/error")
-    public String errorPage() {
-        return "error";
-    }
+//    @GetMapping("/error")
+//    public String errorPage() {
+//        return "aerror";
+//    }
 
 //    @GetMapping("/scheduler")
 //    public String scheduler(Model model) {

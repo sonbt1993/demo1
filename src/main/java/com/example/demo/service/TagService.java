@@ -11,9 +11,7 @@ import java.util.List;
 public interface TagService {
 
     List<Tag> getAllTag();
-    List<Tag> getAllTagOfPost(Post post);
     Tag save(Tag tag);
-    Page<Tag> listAll(int pageNum, String sortField, String sortDir);
     Tag findById(int id);
     void deleteById(int tagId);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,27 +55,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(localeInterceptor).addPathPatterns("/*");
     }
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        exposeDirectory("images", registry);
-//    }
-//
-//    private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {
-//        Path uploadDir = Paths.get(dirName);
-//        String uploadPath = uploadDir.toFile().getAbsolutePath();
-//
-//        if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
-//
-//        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
-//
-//    }
+    @Value("${upload.path}")
+    private String path;
 
-
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry){
-//        registry.addResourceHandler("/**")
-//                .addResourceLocations("src/main/resources/static");
-//    }
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/**").addResourceLocations("file:///" +  path + "/images/");
+    }
 
 
 }

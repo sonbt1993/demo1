@@ -1,5 +1,6 @@
 package com.example.demo.utils;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,16 +19,6 @@ public class FileUploadUtil {
             Files.createDirectories(uploadPath);
         }
 
-//        try {
-//            if (!multipartFile.isEmpty()){
-//                Path filePath = uploadPath.resolve(fileName);
-//                Files.write(filePath, multipartFile.getBytes(), );
-//            }
-//        }catch (IOException ioe) {
-//            throw new IOException("Could not save image file: " + fileName, ioe);
-//        }
-
-
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -35,4 +26,24 @@ public class FileUploadUtil {
             throw new IOException("Could not save image file: " + fileName, ioe);
         }
     }
+
+
+//    @Value("${upload.path}")
+//    private String path;
+//
+//    public void saveFile(MultipartFile file) throws IOException {
+//
+//        if (file.isEmpty()) {
+//            throw new StorageException("Failed to store empty file");
+//        }
+//
+//        String fileName = file.getOriginalFilename();
+//        try {
+//            var is = file.getInputStream();
+//            Files.copy(is, Paths.get(path + fileName), StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException e) {
+//            var msg = String.format("Failed to store file %s", fileName);
+//            throw new IOException(msg, e);
+//        }
+//    }
 }

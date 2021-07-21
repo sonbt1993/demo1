@@ -38,9 +38,10 @@ public class PostController {
     private TagMapper tagMapper;
     @Autowired
     private PostMapper postMapper;
-
     @Value("${upload.path}")
     private String path;
+
+
 
     @GetMapping("/post/{postId}")
     public String postDetail(Model model, @PathVariable("postId") Long postId, Principal principal ) {
@@ -52,7 +53,6 @@ public class PostController {
 
         Post post =  postService.findPostById(postId);
         PostDTO postDTO = postMapper.postToPostDTO(post);
-//        postDTO.setImage(post.getImage());
         List<Comment> comments = post.getComments();
 
         User author = post.getAuthor();
@@ -61,7 +61,7 @@ public class PostController {
         if (postId != null){
             model.addAttribute("comment", new Comment());
             model.addAttribute("comments", comments);
-            model.addAttribute("post", post);
+//            model.addAttribute("post", post);
             model.addAttribute("postDTO", postDTO);
             model.addAttribute("tags", tagMapper.tagsToTagDTOS( tagService.getAllTag()) );            ;
             model.addAttribute("postTags", postDTO.getTags());
@@ -99,24 +99,22 @@ public class PostController {
 
         Post post = postService.findPostById(postId);
         User user = post.getAuthor();
-        UserDTO author = userMapper.userToUserDTO(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+
         List<Tag> tags = tagService.getAllTag();
         model.addAttribute("tags", tags);
-        model.addAttribute("author", author);
+        model.addAttribute("userDTO", userDTO);
         model.addAttribute("post", post);
-        return "addPost";
+        return "editPost";
     }
 
     @PostMapping("/post/edit")
     public String saveEditPost(@ModelAttribute(name = "post") Post post,
-                               @ModelAttribute(name = "author") UserDTO author,
                                @RequestParam("photo") MultipartFile multipartFile) throws IOException {
-        User user = userService.findUserById(author.getId());
-        post.setAuthor(user);
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        post.setImage(fileName);
+        post.setImage("/images/" + post.getAuthor().getId()+ "/" + fileName);
         postService.addPostIntoUser(post);
-        String uploadDir = path + "/images/" + user.getId();
+        String uploadDir = path + "/images/" +  post.getAuthor().getId();
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         return "redirect:/post/" + post.getId();
     }

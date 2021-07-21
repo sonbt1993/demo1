@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Optional;
-@Transactional(rollbackFor = Exception.class)
+
 @Service
 public class PostServiceImpl implements PostService {
     @Autowired
@@ -35,16 +35,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPost() {
-        return postRepository.findAll();
-    }
-
-    @Override
-    public List<Post> getAllPostOfUser(User user) {
-        return postRepository.findByAuthor(user);
-    }
-
-    @Override
     public void addPostIntoUser(Post post) {
         postRepository.save(post);
     }
@@ -57,16 +47,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePostById(Long id) {
         postRepository.deleteById(id);
-    }
-
-    @Override
-    public Long findUserIdByPostId(Long postId) {
-        return postRepository.findUserIdByPostId(postId);
-    }
-
-    @Override
-    public List<Post> findPostByTagId(int tagId) {
-        return postRepository.findPostByTagId(tagId);
     }
 
     @Override
@@ -88,11 +68,6 @@ public class PostServiceImpl implements PostService {
         Page<Post> postPage = postRepository.findAll(pageable);
         List<PostDTO> dtos = postMapper.postsToPostDTOS(postPage.getContent());
         return new PageImpl<>(dtos, pageable, postPage.getTotalElements());
-    }
-
-    @Override
-    public Page<Post> findAll(Pageable pageable) {
-        return  postRepository.findAll(pageable);
     }
 
 

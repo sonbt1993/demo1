@@ -19,34 +19,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
+
 
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
 
-    @Override
-    public User findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
-    }
+
 
     @Override
     public User findUserById(Long id) {
         return userRepository.findUserById(id);
     }
 
-    @Override
-    public Page<User> listAll(int pageNum, String sortField, String sortDir) {
-        Pageable pageable = PageRequest.of(pageNum - 1, 4,
-                sortDir.equals("asc") ? Sort.by(sortField).ascending()
-                        : Sort.by(sortField).descending()
-        );
-        return userRepository.findAll(pageable);
-    }
 
     @Override
     public Page<UserDTO> getUserDTOs(int pageNum, String sortField, String sortDir) {

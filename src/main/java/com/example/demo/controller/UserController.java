@@ -3,17 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.DTO.PostDTO;
 import com.example.demo.DTO.UserDTO;
 import com.example.demo.DTO.UserMapper;
-import com.example.demo.entity.Post;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Tag;
 import com.example.demo.entity.User;
-import com.example.demo.repository.PostRepository;
-import com.example.demo.repository.TagRepository;
 import com.example.demo.service.PostService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.TagService;
 import com.example.demo.service.UserService;
-import com.example.demo.utils.TagValidator;
 import com.example.demo.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -151,7 +147,7 @@ public class UserController {
     public String userPage(Model model, Principal principal) {
         User user = userService.findUserByUsername(principal.getName());
         if(user==null){
-            return "error";
+            return "aerror";
         };
         UserDTO personal = userMapper.userToUserDTO(user);
         model.addAttribute("personal", personal);
@@ -163,7 +159,7 @@ public class UserController {
 
         User personal = userService.findUserByUsername(name);
         if(personal==null){
-            return "error";
+            return "aerror";
         };
         model.addAttribute("personal", personal);
         return "user";
