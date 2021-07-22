@@ -6,6 +6,7 @@ import com.example.demo.DTO.UserMapper;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Tag;
 import com.example.demo.entity.User;
+import com.example.demo.model.TransferMoneyForm;
 import com.example.demo.service.PostService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.TagService;
@@ -68,8 +69,6 @@ public class UserController {
                            @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir){
         List<Tag> tags = tagService.getAllTag();
 //        List<Post> posts = postService.getAllPost();
-
-
 //        Page<Post> postPage = postService.listAll(pageNum, sortField, sortDir);
         Page<PostDTO> postPage = postService.listAllDTO(pageNum, sortField, sortDir);
 //        model.addAttribute("posts", postPage);
@@ -146,23 +145,41 @@ public class UserController {
     @GetMapping("/user")
     public String userPage(Model model, Principal principal) {
         User user = userService.findUserByUsername(principal.getName());
-        if(user==null){
-            return "aerror";
-        };
         UserDTO personal = userMapper.userToUserDTO(user);
         model.addAttribute("personal", personal);
         return "user";
     }
 
-    @GetMapping("/user/{name}")
-    public String userPage(@PathVariable("name") String name, Model model) {
+//    @GetMapping("/user/{name}")
+//    public String userPage(@PathVariable("name") String name, Model model) {
+//
+//        User personal = userService.findUserByUsername(name);
+//        if(personal==null){
+//            return "aerror";
+//        };
+//        model.addAttribute("personal", personal);
+//        return "user";
+//    }
 
-        User personal = userService.findUserByUsername(name);
-        if(personal==null){
-            return "aerror";
-        };
+    @GetMapping("/transferMoney")
+    public String transferMoneyPage(Model model, Principal principal){
+        User personal = userService.findUserByUsername(principal.getName());
+        TransferMoneyForm transferMoneyForm = new TransferMoneyForm();
+        transferMoneyForm.setSenderName(personal.getUsername());
         model.addAttribute("personal", personal);
-        return "user";
+        model.addAttribute("transferMoneyForm", transferMoneyForm);
+        return "transferMoney";
+    }
+
+    @PostMapping("/transferMoney")
+    public String transferMoney(@ModelAttribute(name = "personal") User personal,
+                                @ModelAttribute(name = "transferMoneyForm") TransferMoneyForm transferMoneyForm){
+        TransferMoneyForm form = transferMoneyForm;
+
+        userService.transferMoney(form.getSenderName(),
+                form.getReceiverName(),
+                form.getAmount());
+        return "redirect:/transferMoney";
     }
 
 

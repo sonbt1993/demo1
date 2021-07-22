@@ -59,7 +59,7 @@ public class TagController {
     }
 
     @PostMapping("/admin/addTag")
-    public String saveNewTag(Model model, @ModelAttribute(name = "tag")@Validated Tag tag, BindingResult result){
+    public String saveNewTag(Model model, @ModelAttribute(name = "tag") Tag tag, BindingResult result){
         if (result.hasErrors()) {
             return "addTag";
         }

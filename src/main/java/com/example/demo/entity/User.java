@@ -1,7 +1,8 @@
 package com.example.demo.entity;
 
+
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class User {
     private String password;
     @Column(nullable = false)
     private String email;
+    private double credit;
+
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
@@ -98,5 +101,13 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public double getCredit() {
+        return credit;
+    }
+
+    public void setCredit(double credit) {
+        this.credit = credit;
     }
 }

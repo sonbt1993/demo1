@@ -8,9 +8,12 @@ import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
+
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,14 +22,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-
-
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
-
-
 
     @Override
     public User findUserById(Long id) {
@@ -53,6 +52,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public void transferMoney(String sender, String receiver, Double amount) {
+        deduct(sender, amount);
+        deposit(receiver, amount);
+    }
+
+    @Transactional
+    @Override
+    public void deduct(String sender, double amount) {
+        User fromUser = userRepository.findUserByUsername(sender);
+        double credit = fromUser.getCredit();
+        if (credit<amount){
+            throw new IllegalStateException("Not enough money");
+        } else {
+            fromUser.setCredit(credit - amount);
+            userRepository.save(fromUser);
+        }
+    }
+    @Transactional(propagation = Propagation.MANDATORY)
+    @Override
+    public void deposit(String receiver, double amount) {
+        User toUser = userRepository.findUserByUsername(receiver);
+        toUser.setCredit(toUser.getCredit() + amount);
+        userRepository.save(toUser);
+        if (new Random().nextBoolean()) {
+            throw new RuntimeException("DummyException: this should cause rollback of both inserts!");
+        }
     }
 
 
